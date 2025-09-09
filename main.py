@@ -29,7 +29,7 @@ async def bitcoin_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(get_bitcoin_summary())
 
 async def track_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(track_coins_summary())
+    await update.message.reply_text(track_coins_summary(), parse_mode="HTML")
 
 async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("This is a custom command!.")

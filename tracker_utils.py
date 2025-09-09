@@ -11,7 +11,6 @@ targets = {
     "ripple": 3.03, 
 }
 
-
 coin_info = {
     "bitcoin":  {"symbol": "BTC", "logo": "🟠"},
     "ethereum": {"symbol": "ETH", "logo": "💎"},
@@ -26,25 +25,28 @@ def format_price(value: float) -> str:
         return f"{value:,.2f}"  
 
 def track_coins_summary() -> str:
-    table = "📊 Crypto Price Tracker\n\n"
-    
+    table = "📊 <b>Crypto Price Tracker</b>\n\n"
+
+    data = cg.get_price(ids=",".join(targets.keys()), vs_currencies="usd")
+
     for coin, target in targets.items():
-        data = cg.get_price(ids=coin, vs_currencies="usd")
         price = data[coin]["usd"]
-        status = "✅ Met" if price >= target else "❌ Not yet"
+        status = "✅ <b>Met</b>" if price >= target else "❌ <i>Not yet</i>"
 
         symbol = coin_info[coin]["symbol"]
         logo = coin_info[coin]["logo"]
         name = coin.capitalize()
 
+        # add line spacing for readability
         table += (
-            f"{logo} {name:9} ({symbol}) | "
-            f"Target: ${format_price(target)} | "
-            f"Current: ${format_price(price)} | "
-            f"{status}\n"
+            f"{logo} <b>{name}</b> ({symbol})\n"
+            f"🎯 Target: <code>${format_price(target)}</code>\n"
+            f"💰 Current: <code>${format_price(price)}</code>\n"
+            f"📌 Status: {status}\n\n"
         )
 
     return table
+
 
 # Example usage
 if __name__ == "__main__":
