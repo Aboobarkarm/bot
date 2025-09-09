@@ -4,6 +4,7 @@ from typing import Final
 
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
+from telegram.constants import ChatAction
 from crypto_utils import get_bitcoin_summary
 from tracker_utils import track_coins_summary
 
@@ -13,6 +14,7 @@ load_dotenv()
 TOKEN: Final = os.getenv("BOT_TOKEN")
 BOT_USERNAME: Final = "@AAAppleSeedBot"
 PORT: Final = int(os.getenv("PORT", 5000))  
+
 
 
 # Telegram Bot application
@@ -26,10 +28,47 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("I am an apple! Please type something so I can respond!")
 
 async def bitcoin_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(get_bitcoin_summary())
+    """ await update.message.reply_text(get_bitcoin_summary()) """
+
+    chat_id = update.effective_chat.id
+
+    await context.bot.send_chat_action(
+        chat_id=chat_id,
+        action=ChatAction.TYPING
+    )
+
+    loading_message = await update.message.reply_text(
+        "⏳ Fetching latest Bitcoin price..."
+    )
+
+    await loading_message.edit_text(
+        text=get_bitcoin_summary(),
+        parse_mode="HTML"   
+    )
 
 async def track_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(track_coins_summary(), parse_mode="HTML")
+    """ await update.message.reply_text(track_coins_summary(), parse_mode="HTML") """
+    chat_id = update.effective_chat.id
+
+    # 1. Show typing indicator (better UX)
+    await context.bot.send_chat_action(
+        chat_id=chat_id, 
+        action=ChatAction.TYPING
+    )
+
+    # 2. Send a temporary "loading" message
+    loading_message = await update.message.reply_text(
+        "⏳ Fetching crypto prices, please wait..."
+    )
+
+    # 3. Generate the summary (this part takes some time)
+    
+
+    # 4. Replace the loading message with the final result
+    await loading_message.edit_text(
+        text=track_coins_summary(),
+        parse_mode="HTML"   
+    )
 
 async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text("This is a custom command!.")
