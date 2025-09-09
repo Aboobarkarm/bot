@@ -71,7 +71,7 @@ async def error_handler(update: object, context: ContextTypes.DEFAULT_TYPE):
 # Add handlers to bot
 bot_app.add_handler(CommandHandler("start", start_command))
 bot_app.add_handler(CommandHandler("help", help_command))
-bot_app.add_handler(CommandHandler("price", bitcoin_command))
+bot_app.add_handler(CommandHandler("bitcoin", bitcoin_command))
 bot_app.add_handler(CommandHandler("custom", custom_command))
 bot_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 bot_app.add_error_handler(error_handler)
