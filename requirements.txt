@@ -1,2 +1,3 @@
 python-telegram-bot[webhooks]==22.3
 python-dotenv
+pycoingecko==3.1.0
