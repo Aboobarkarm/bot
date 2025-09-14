@@ -86,6 +86,8 @@ def handle_response(text: str) -> str:
         return "Goodbye! See you soon 👋"
     elif "apple" in processed:
         return "Did someone say Apple? 🍎"
+    elif "launch" in processed:
+        return "Monday 4 PM UTC"
     else:
         return "Sorry, I don’t understand that yet."
 
