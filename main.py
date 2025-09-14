@@ -87,7 +87,11 @@ def handle_response(text: str) -> str:
     elif "apple" in processed:
         return "Did someone say Apple? 🍎"
     elif "launch" in processed:
-        return "Monday 4 PM UTC"
+        return "The launch is scheduled for Monday 4 PM UTC 🚀"
+    elif "monday" in processed:
+        return "Yes, it’s happening on Monday 📅"
+    elif "schedule" in processed:
+        return "Here’s the schedule: Monday 4 PM UTC ⏰"
     else:
         return "Sorry, I don’t understand that yet."
 
@@ -102,7 +106,11 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             new_text = text.replace(BOT_USERNAME, "").strip()
             response = handle_response(new_text)
         else:
-            return
+
+            if any(word in text.lower() for word in ["launch", "monday", "schedule"]):
+                response = handle_response(text)
+            else:
+             return
     else:
         response = handle_response(text)
 
