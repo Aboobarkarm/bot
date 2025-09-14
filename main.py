@@ -14,6 +14,8 @@ load_dotenv()
 TOKEN: Final = os.getenv("BOT_TOKEN")
 BOT_USERNAME: Final = "@AAAppleSeedBot"
 PORT: Final = int(os.getenv("PORT", 5000))  
+IMAGE_PATH = os.path.join("images", "launch.jpg")
+
 
 
 
@@ -109,6 +111,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             if any(word in text.lower() for word in ["launch", "monday", "schedule"]):
                 response = handle_response(text)
+
+                # Send text + image together
+                with open(IMAGE_PATH, "rb") as img:
+                    await update.message.reply_photo(
+                        photo=img,
+                        caption=response  
+                    )
+                    return
             else:
              return
     else:
